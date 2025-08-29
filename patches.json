@@ -1,7 +1,7 @@
 {
-    "patches": {
-        "drupal/core": {
-            "#3531174: Add configuration for additional known files in project root": "https://git.drupalcode.org/project/drupal/-/merge_requests/12432.patch"
-        }
+  "patches": {
+    "drupal/decoupled_preview_iframe": {
+      "Drupal 11 compatibility: Add TypedConfigManagerInterface support": "patches/decoupled-preview-iframe-drupal11-fix.patch"
     }
+  }
 }

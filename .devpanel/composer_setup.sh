@@ -6,13 +6,20 @@
 set -eu -o pipefail
 cd $APP_ROOT
 
-# Create required composer.json and composer.lock files in a temp directory
+# Create required composer.json and composer.lock files
 TMP_DIR=".devpanel/_create_tmp"
 rm -rf "$TMP_DIR"
 mkdir -p "$TMP_DIR"
-composer create-project -s dev --no-install ${PROJECT:=nextagencyio/drupal-cloud-project:dev-main} "$TMP_DIR"
-cp -R "$TMP_DIR"/* ./
-rm -rf "$TMP_DIR" patches.lock.json
+
+# If LOCAL_PROJECT_DIR is provided and exists, copy from it; otherwise use composer create-project
+if [ -n "${LOCAL_PROJECT_DIR:-}" ] && [ -d "$LOCAL_PROJECT_DIR" ]; then
+  echo "Using local source from $LOCAL_PROJECT_DIR"
+  cp -R "$LOCAL_PROJECT_DIR"/* ./
+else
+  composer create-project -s dev --no-install ${PROJECT:=nextagencyio/drupal-cloud-project:dev-main} "$TMP_DIR"
+  cp -R "$TMP_DIR"/* ./
+fi
+rm -rf "$TMP_DIR"
 
 # Programmatically fix Composer 2.2 allow-plugins to avoid errors.
 composer config --no-plugins allow-plugins.cweagans/composer-patches true

@@ -31,9 +31,13 @@ time sudo rm -rf lost+found
 echo
 if [ -f composer.json ]; then
   if composer show --locked cweagans/composer-patches ^2 &> /dev/null; then
-    echo 'Update patches.lock.json.'
-    time composer prl
-    echo
+    if [ "${DP_REGENERATE_PATCHES_LOCK:-0}" = "1" ]; then
+      echo 'Regenerating patches.lock.json (DP_REGENERATE_PATCHES_LOCK=1).'
+      time composer patches:lock
+      echo
+    else
+      echo 'Skipping patches.lock.json regeneration (set DP_REGENERATE_PATCHES_LOCK=1 to enable).'
+    fi
   fi
 else
   echo 'Generate composer.json.'
