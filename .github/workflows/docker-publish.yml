@@ -16,10 +16,7 @@ jobs:
       # Set your Docker Hub repo (e.g., myuser/my-drupal-app). If omitted, defaults to <org>/<repo>.
       image_repo: ${{ vars.DOCKER_IMAGE_REPO }}
       # Which files to hash to decide if a new image should be published.
-      files_to_hash: |
-        composer.lock
-        patches.json
-        patches/*.patch
+      files_to_hash: ${{ github.sha }}
     secrets:
       dockerhub_token: ${{ secrets.DOCKERHUB_TOKEN }}
       dp_ai_virtual_key: ${{ secrets.DP_AI_VIRTUAL_KEY }}
