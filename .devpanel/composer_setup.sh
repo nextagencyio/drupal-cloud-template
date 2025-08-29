@@ -6,10 +6,13 @@
 set -eu -o pipefail
 cd $APP_ROOT
 
-# Create required composer.json and composer.lock files.
-composer create-project --no-install ${PROJECT:=nextagencyio/drupal-cloud-project}
-cp -r "${PROJECT#*/}"/* ./
-rm -rf "${PROJECT#*/}" patches.lock.json
+# Create required composer.json and composer.lock files in a temp directory
+TMP_DIR=".devpanel/_create_tmp"
+rm -rf "$TMP_DIR"
+mkdir -p "$TMP_DIR"
+composer create-project -s dev --no-install ${PROJECT:=nextagencyio/drupal-cloud-project:dev-main} "$TMP_DIR"
+cp -R "$TMP_DIR"/* ./
+rm -rf "$TMP_DIR" patches.lock.json
 
 # Programmatically fix Composer 2.2 allow-plugins to avoid errors.
 composer config --no-plugins allow-plugins.cweagans/composer-patches true
@@ -22,7 +25,7 @@ composer config -jm extra.drupal-scaffold.file-mapping '{
     }
 }'
 composer config scripts.post-drupal-scaffold-cmd \
-    'cd web/sites/default && test -z "$(grep '\''include \$devpanel_settings;'\'' settings.php)" && patch -Np1 -r /dev/null < $APP_ROOT/.devpanel/drupal-settings.patch || :'
+    'cd web/sites/default && test -z "$(grep '\''include \\$devpanel_settings;'\'' settings.php)" && patch -Np1 -r /dev/null < $APP_ROOT/.devpanel/drupal-settings.patch || :'
 
 # Add Drush and Composer Patches.
 composer require -n --no-update \

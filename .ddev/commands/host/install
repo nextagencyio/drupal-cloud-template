@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+#ddev-description: Install Drupal Cloud site using project script
+#ddev-generated
+set -euo pipefail
+
+# Delegate to the project's install script, which uses `ddev drush ...`
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+
+bash "$REPO_ROOT/drupal-cloud-project/.ddev/commands/host/install" "$@"
