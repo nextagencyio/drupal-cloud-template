@@ -1,0 +1,22 @@
+name: Docker Publish
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-application:
+    uses: drupalforge/docker_publish_action/.github/workflows/docker-publish.yml@main
+    with:
+      dockerhub_username: ${{ vars.DOCKERHUB_USERNAME }}
+      # Set your Docker Hub repo (e.g., myuser/my-drupal-app). If omitted, defaults to <org>/<repo>.
+      image_repo: ${{ vars.DOCKER_IMAGE_REPO }}
+      # Which files to hash to decide if a new image should be published.
+      files_to_hash: composer.lock
+    secrets:
+      dockerhub_token: ${{ secrets.DOCKERHUB_TOKEN }}
+      dp_ai_virtual_key: ${{ secrets.DP_AI_VIRTUAL_KEY }}
