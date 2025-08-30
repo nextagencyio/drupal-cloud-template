@@ -21,8 +21,10 @@ else
 fi
 rm -rf "$TMP_DIR"
 
-# Programmatically fix Composer 2.2 allow-plugins to avoid errors.
-composer config --no-plugins allow-plugins.cweagans/composer-patches true
+# Programmatically fix Composer 2.2 allow-plugins to avoid errors (optional).
+if [ "${ENABLE_PATCHES:-0}" = "1" ]; then
+  composer config --no-plugins allow-plugins.cweagans/composer-patches true
+fi
 
 # Scaffold settings.php.
 composer config -jm extra.drupal-scaffold.file-mapping '{
@@ -34,7 +36,11 @@ composer config -jm extra.drupal-scaffold.file-mapping '{
 composer config scripts.post-drupal-scaffold-cmd \
     'cd web/sites/default && test -z "$(grep '\''include \\$devpanel_settings;'\'' settings.php)" && patch -Np1 -r /dev/null < $APP_ROOT/.devpanel/drupal-settings.patch || :'
 
-# Add Drush and Composer Patches.
-composer require -n --no-update \
-    drush/drush \
-    cweagans/composer-patches:^2@beta
+# Add Drush and (optionally) Composer Patches.
+if [ "${ENABLE_PATCHES:-0}" = "1" ]; then
+  composer require -n --no-update \
+      drush/drush \
+      cweagans/composer-patches:^2@beta
+else
+  composer require -n --no-update drush/drush
+fi
