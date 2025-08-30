@@ -45,6 +45,8 @@ else
   echo
 fi
 # If update fails, change it to install.
+# Clear Composer cache to avoid stale cached patch artifacts.
+time composer clear-cache
 time composer -n update --no-dev --no-progress
 
 #== Create the private files directory.
