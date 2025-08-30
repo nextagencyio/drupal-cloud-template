@@ -16,7 +16,7 @@ if [ -n "${LOCAL_PROJECT_DIR:-}" ] && [ -d "$LOCAL_PROJECT_DIR" ]; then
   echo "Using local source from $LOCAL_PROJECT_DIR"
   cp -R "$LOCAL_PROJECT_DIR"/* ./
 else
-  composer create-project -s dev --no-install ${PROJECT:=nextagencyio/drupal-cloud-project:dev-devpanel} "$TMP_DIR"
+  composer create-project -s dev --no-install ${PROJECT:=nextagencyio/drupal-cloud-project:dev-main} "$TMP_DIR"
   cp -R "$TMP_DIR"/* ./
 fi
 rm -rf "$TMP_DIR"
