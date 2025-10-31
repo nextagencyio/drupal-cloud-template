@@ -102,9 +102,20 @@ if [ -z "$(drush status --field=db-status)" ]; then
   time drush ev '\Drupal::moduleHandler()->invoke("automatic_updates", "modules_installed", [[], FALSE]);'
 
   echo
+  echo 'Applying dcloud-admin recipe...'
+  time drush -n recipe ../recipes/dcloud-admin || :
+
+  echo 'Applying dcloud-api recipe...'
+  time drush -n recipe ../recipes/dcloud-api || :
+
+  echo 'Applying dcloud-fields recipe...'
+  time drush -n recipe ../recipes/dcloud-fields || :
+
   echo 'Applying dcloud-core recipe...'
-  # Apply the same recipe as the host install script (relative to web root).
   time drush -n recipe ../recipes/dcloud-core || :
+
+  echo 'Applying dcloud-content recipe...'
+  time drush -n recipe ../recipes/dcloud-content || :
 
   echo 'Clearing cache...'
   time drush -n cr || :
