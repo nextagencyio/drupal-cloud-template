@@ -41,7 +41,7 @@ if [ -f composer.json ]; then
   fi
 else
   echo 'Generate composer.json.'
-  time source .devpanel/composer_setup.sh
+  time source $APP_ROOT/.devpanel/composer_setup.sh
   echo
 fi
 # If update fails, change it to install.
